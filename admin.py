@@ -33,10 +33,6 @@ def load_data():
 def load_style():
     st.markdown("""
     <style>
-    .stApp {
-        background: linear-gradient(to right, #0f172a, #020617);
-        color: white;
-    }
     #MainMenu, footer, header {
         visibility: hidden;
     }
@@ -53,13 +49,6 @@ def load_style():
         font-size: 14px;
         color: #9ca3af;
         margin-bottom: 25px;
-    }
-    .stTextInput > div > div > input {
-        background-color: #1e293b;
-        color: white;
-        border-radius: 10px;
-        border: none;
-        padding: 12px;
     }
     .stButton button {
         width: 100%;
