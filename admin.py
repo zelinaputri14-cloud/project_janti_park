@@ -68,21 +68,64 @@ def login_page():
 
     st.markdown('<div class="login-container">', unsafe_allow_html=True)
 
-    st.markdown('<div class="title">🔐 Admin Login</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Silakan masuk untuk melanjutkan</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="title">🔐 Admin Login</div>',
+        unsafe_allow_html=True
+    )
 
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    st.info(
+    """
+    Ketentuan akun admin:
+    - Username maksimal 20 karakter
+    - Username hanya menggunakan huruf kecil
+    - Password harus 8 karakter
+    - Password hanya menggunakan huruf kecil dan angka
+    """
+    )
+
+    username = st.text_input(
+        "Username",
+        placeholder="contoh: adminjanti"
+    )
+
+    password = st.text_input(
+        "Password",
+        type="password",
+        placeholder="contoh: admin1234"
+    )
 
     if st.button("Login"):
-        df = load_admin()
 
-        if ((df["username"] == username) & (df["password"] == password)).any():
-            st.session_state.login = True
-            st.session_state.admin_user = username
-            st.rerun()
+        # Validasi Username
+        if len(username) > 20:
+            st.error("Username maksimal 20 karakter ❌")
+
+        elif not username.islower() or not username.isalpha():
+            st.error("Username hanya boleh menggunakan huruf kecil ❌")
+
+        # Validasi Password
+        elif len(password) < 8:
+            st.error("Password minimal 8 karakter ❌")
+
+        elif not password.islower() or not password.isalnum():
+            st.error(
+                "Password hanya boleh menggunakan huruf kecil dan angka ❌"
+            )
+
         else:
-            st.error("Username atau password salah ❌")
+            df = load_admin()
+
+            if (
+                (df["username"] == username)
+                & (df["password"] == password)
+            ).any():
+
+                st.session_state.login = True
+                st.session_state.admin_user = username
+                st.rerun()
+
+            else:
+                st.error("Username atau password salah ❌")
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -116,7 +159,7 @@ def admin_page():
         st.rerun()
 
 
-# ===== MAIN FUNCTION (INI YANG DIPANGGIL APP.PY) =====
+# ===== MAIN FUNCTION =====
 def show_admin():
     if st.session_state.login:
         admin_page()
